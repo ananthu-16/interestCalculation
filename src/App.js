@@ -2,10 +2,10 @@ import React, { useState , useEffect } from 'react';
 import InputSlider from './components/slider';
 import SideBar from './components/sidebar';
 import Typography from '@material-ui/core/Typography';
-import Input from '@material-ui/core/Input';
 import Grid from '@material-ui/core/Grid';
 import { useStyles } from './styles';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 
 //variables to store the input history from local storage.
@@ -116,6 +116,7 @@ function App(){
         variant="h6">
         Select your loan amount
       </Typography>
+      <Typography variant="body1">Select loan amount (in hundred dollars)</Typography>
       <InputSlider
       amount={amount}
       duration={duration}
@@ -126,6 +127,7 @@ function App(){
       onChanged={handleAmountChange}
       className={classes.slider}
       />
+    <Typography variant="body1">Select loan amount (in one dollars)</Typography>
       <InputSlider
       amount={amount}
       duration={duration}
@@ -136,7 +138,21 @@ function App(){
       onChanged={handleValueChange}
       className={classes.slider}
       />
-      <Input value={totalAmount} disabled={true} className={classes.input}/>
+      <TextField
+         type="number"
+         min="500"
+         max="5000"
+         id="outlined-helperText"
+         label="Total Amount"
+         variant="outlined"
+         size="small"
+         disabled={false}
+         value={totalAmount}
+         className={classes.input}
+         onChange={function(e){
+           setTotalAmount(e.target.value)
+         }}
+       />
       <Typography
         className={classes.heading}
         id="discrete-slider"
@@ -153,7 +169,23 @@ function App(){
        steps={1}
        onChanged={handleDurationChange}
        className={classes.slider} />
-      <Input value={duration} disabled={true} className={classes.input}/>
+       <TextField
+          type="number"
+          min="6"
+          max="24"
+          id="outlined-helperText"
+          label="Duration"
+          variant="outlined"
+          size="small"
+          disabled={false}
+          value={duration}
+          className={classes.input}
+          onChange={function(e){
+            setDuration(e.target.value)
+          }}
+        />
+      <br/>
+      <br/>
       <Button
       className={classes.btn}
       variant="contained"
@@ -162,8 +194,8 @@ function App(){
         submit
       </Button>
       <div>
-      <p>Interest rate : {interestRate}</p>
-      <p>Monthly Payment : {monthlyPayment}</p>
+      <p className={classes.p}>Interest rate : {interestRate}</p>
+      <p className={classes.p}>Monthly Payment : {monthlyPayment} $</p>
       </div>
     </div>
     </Grid>
