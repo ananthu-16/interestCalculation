@@ -8,20 +8,30 @@ import { useStyles } from './styles';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 
+//variables to store the input history from local storage.
 var inputs = [];
 var storedInputs = [];
+
+
 function App(){
 
+  //state variable used to submit the input details.
   const [isSubmitted,setSubmit] = useState(false);
+  //state variable to get the total loan amount from two other state variables
   const [totalAmount,setTotalAmount] = useState(500);
   const [amount,setAmount] = useState(500);
   const [value,setValue] = useState(0);
+  //state variable to store loan duration
   const [duration,setDuration] = useState(6);
+  //state variable to display interest rate.
   const [interestRate,setInterestRate] = useState(0);
+  //state variable to display monthly payable amount.
   const [monthlyPayment,setMonthlyPayment] = useState(0);
 
+  //customising styles
   const classes = useStyles();
 
+  //handle functions for total amount and duration.
   function handleValueChange(e,v){
     setValue(v);
     setTotalAmount(amount + value);
@@ -36,10 +46,14 @@ function App(){
     setDuration(v);
   }
 
+  //handle function to calculate interest rate from recent inputs.
   function handleRecentInput(e){
     setTotalAmount(e.target.id);
     setDuration(e.target.name);
   }
+
+  //handle function that stores the input details to local storage
+  //and trigers api call.
   function handleClick(){
     const inputObject = {
       'amount' : totalAmount,
@@ -57,22 +71,27 @@ function App(){
     })
   }
 
+  //async function to get details from the api
   const getData = async () => {
     const data = await fetchData();
     setInterestRate(data.interestRate);
     setMonthlyPayment(data.monthlyPayment);
   };
 
+  //variable to store all recent inputs.
   useEffect(function(){
     storedInputs = JSON.parse(localStorage.getItem("input"))
   },[]);
 
+  //hook to triger api call on changing the state of variable.
   useEffect(function(){
     getData();
   },[isSubmitted]);
 
+
   const url = "https://ftl-frontend-test.herokuapp.com/interest?amount="+totalAmount+"&numMonths="+duration;
 
+  //fetch data and destructure it.
   const fetchData = async () => {
     try {
         const { data } = await axios.get(url);

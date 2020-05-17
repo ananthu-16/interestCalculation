@@ -1,5 +1,7 @@
 import React from 'react';
 
+//display recent inputs
+
 function SideBar(props){
 
   function createEntry(entry){
